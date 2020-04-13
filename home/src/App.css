@@ -1,7 +1,7 @@
 .App {
   text-align: center;
   min-height: 100vh;
-  background-color: #282c34;
+  background-color: #b7b7b7;
 }
 
 .App-header {
@@ -10,7 +10,7 @@
 }
 
 .App-body{
-  min-height: 75vh;
+  min-height: 65vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,7 +20,7 @@
 }
 
 .App-buttons{
-  min-height: 12.5vh;
+  min-height: 22.5vh;
 }
 
 .App-progress{
