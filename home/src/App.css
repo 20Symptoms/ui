@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  min-height: 100vh;
   background-color: #282c34;
 }
 
@@ -19,7 +20,13 @@
 }
 
 .App-buttons{
-  min-height: 25vh;
+  min-height: 12.5vh;
+}
+
+.App-progress{
+  color: white;
+  flex-direction: column;
+  min-height: 10.5vh;
 }
 
 .App-link {

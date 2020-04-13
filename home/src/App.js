@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import LinearProgress from '@material-ui/core/LinearProgress'
 import './App.css';
 
 
@@ -24,6 +25,11 @@ function App() {
         <Button variant="contained" color="default"> I Don't Know </Button>
         <div class="divider" />
         <Button variant="contained" color="primary"> Yes </Button>
+      </header>
+
+      <header className="App-progress">
+        <p>Progress: 1/20</p>
+        <LinearProgress variant="determinate" value={5} color="secondary" />
       </header>
     </div>
   );
