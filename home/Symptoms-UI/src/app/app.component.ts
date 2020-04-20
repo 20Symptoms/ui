@@ -27,50 +27,69 @@ export class AppComponent {
   public sexControl = new FormControl('', Validators.required);
   public ageControl = new FormControl('', Validators.required);
 
-  public sexes = ['Male', 'Female', 'Dan'];
+  public sexes = ['male', 'female', 'Dan'];
 
   public ages = new Array(100).fill(undefined).map((_, i) => i + 1);
 
   public payload = {
     sex: this.sexControl.value,
     age: this.ageControl.value,
-    evidence: [],
+    evidence: [
+      {
+        id: 'NA',
+        choice_id: 'NA',
+        initial: 'true',
+      },
+    ],
+    extras: 'disable_groups',
   };
+
+  updatePayload(newAnswer, symptomID): void {
+    if (this.counter === 1) {
+      this.payload.sex = this.sexControl.value;
+      this.payload.age = this.ageControl.value;
+      this.payload.evidence = [
+        {
+          id: 's_21',
+          choice_id: this.questionAnswer,
+          initial: 'true',
+        },
+      ];
+    } else {
+      let oldEvidence = this.payload.evidence;
+      let newEvidence = {
+        id: symptomID.toString(),
+        choice_id: newAnswer.toString(),
+        initial: 'false',
+      };
+      this.payload.evidence.push(newEvidence);
+    }
+    console.log(this.payload);
+  }
 
   yesFunction(): void {
     console.log('Yes selected');
     this.questionAnswer = 'present';
-    let payload = this.payload;
-    payload['evidence'].push({
-      id: 's_21',
-      choice_id: this.questionAnswer,
-      initial: 'true',
-    });
-    this.payload = payload;
+    this.updatePayload(this.questionAnswer, 's_21');
     this.buttonClicked();
   }
 
   noFunction(): void {
     console.log('No selected');
     this.questionAnswer = 'absent';
-    let payload = this.payload;
-    payload['evidence'].push({
-      id: 's_21',
-      choice_id: this.questionAnswer,
-      initial: 'true',
-    });
-    this.payload = payload;
+    this.updatePayload(this.questionAnswer, 's_21');
     this.buttonClicked();
   }
 
   idkFunction(): void {
     console.log('Idk selected');
     this.questionAnswer = 'unknown';
+    this.updatePayload(this.questionAnswer, 's_21');
     this.buttonClicked();
   }
 
   buttonClicked(): void {
-    this.response = this.symptomsService.getDiagnosis(this.payload);
+    this.response = this.symptomsService.postPayload(this.payload);
     if (this.counter === 20) {
       this.gettingDiagnosis();
     } else {
