@@ -1,22 +1,89 @@
-<div className="App">
-  <header className="App-header">
-  </header>
+<html>
+  <body>
+    <div class="App">
+      <div class="grid">
+        <header className="App-header"></header>
 
-  <header className="App-body">
-    <p1>Question 1:</p1>
-    <p2>Are you dead?</p2>
-  </header>
+        <img
+          class="logo"
+          src="assets/20SymptomsLogo.jpeg"
+          (click)="rickRoll()"
+        />
 
-  <header className="App-buttons">
-    <Button variant="contained" color="secondary" size="large"> No </Button>
-    <div class="divider"></div>
-    <Button variant="contained" color="default" size="large"> I Don't Know </Button>
-    <div class="divider"></div>
-    <Button variant="contained" color="primary" size="large"> Yes </Button>
-  </header>
+        <header class="App-body">
+          <!-- <input [(ngModel)]="name" style="margin-bottom: 20px;" />
+          <div>Your name is: {{ name }}</div>-->
 
-  <header className="App-progress">
-    <p>Progress: 1/20</p>
-    <LinearProgress variant="determinate" value={5} color="secondary"></LinearProgress>
-  </header>
-</div>
+          <h1 *ngIf="response | async as res">{{ res.message }}</h1>
+          <ng-container *ngIf="!done">
+            <p>Question {{ counter }}:</p>
+            <p>{{ question }}</p>
+          </ng-container>
+          <ng-container *ngIf="done">
+            <!--<h1>{{ name | uppercase }} IS BIG FUCKERINO</h1>
+            <img class="diagnosisImage" src="assets/IDiagnoseYouWithDead.png" />-->
+          </ng-container>
+        </header>
+
+        <header>
+          <div class="App-buttons">
+            <button mat-raised-button class="YesButton" (click)="yesFunction()">
+              Yes
+            </button>
+            <button
+              mat-raised-button
+              class="DontKnowButton"
+              (click)="idkFunction()"
+            >
+              I Don't Know
+            </button>
+            <button mat-raised-button class="NoButton" (click)="noFunction()">
+              No
+            </button>
+
+            <ng-container *ngIf="done">
+              <button
+                mat-raised-button
+                class="PlayAgainButton"
+                (click)="playAgainFunction()"
+              >
+                Play Again?
+              </button>
+            </ng-container>
+          </div>
+        </header>
+
+        <div class="setupButtons">
+          <mat-form-field id="chooseSex">
+            <mat-label>Sex</mat-label>
+            <mat-select required [formControl]="sexControl">
+              <mat-option *ngFor="let sex of sexes" [value]="sex">{{
+                sex
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field id="chooseAge">
+            <mat-label>Age</mat-label>
+            <mat-select required [formControl]="ageControl">
+              <mat-option *ngFor="let age of ages" [value]="age">{{
+                age
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="ProgressBar">
+          <header className="App-progress">
+            <!--<p>Progress: 1/20</p>-->
+            <mat-progress-bar
+              mode="determinate"
+              [value]="(counter / 20) * 100"
+              color="secondary"
+            ></mat-progress-bar>
+          </header>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

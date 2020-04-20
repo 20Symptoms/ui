@@ -1,0 +1,62 @@
+.logo {
+  width: 20%;
+  height: 20%;
+}
+
+.ProgressBar header mat-progress-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+  color: white;
+}
+
+.App-body {
+  position: relative;
+  margin-left: 40%;
+  margin-top: 200px;
+  font-size: 34px;
+  color: white;
+}
+
+.App-buttons {
+  margin: 10px auto;
+  left: 0%;
+  justify-content: center;
+  margin-left: 34%;
+}
+
+.App-buttons button {
+  margin: 50px;
+  width: 100px;
+  height: 40px;
+  color: white;
+}
+
+.YesButton {
+  background-color: #4155ad;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.NoButton {
+  background-color: #df315a;
+  color: white;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.DontKnowButton {
+  background-color: #b3b4b3;
+  color: black;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.playAgainButton {
+  background-color: #b3b4b3;
+  color: black;
+  vertical-align: middle;
+  text-align: center;
+}
