@@ -1,0 +1,75 @@
+<img class="logo" src="assets/20SymptomsLogo.jpeg" (click)="rickRoll()" />
+<div class="container">
+  
+  <div class="setupButtons">
+    <mat-form-field>
+      <mat-label>Sex</mat-label>
+      <mat-select required [formControl]="sexControl">
+        <mat-option *ngFor="let sex of sexes" [value]="sex">{{
+          sex
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Age</mat-label>
+      <mat-select required [formControl]="ageControl">
+        <mat-option *ngFor="let age of ages" [value]="age">{{
+          age
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div *ngIf="!loading">
+    <ng-container *ngIf="evidence.length < 20 && !forcedCompletion">
+      <div *ngIf="!done">
+        <p>Question {{ evidence.length + 1 }}:</p>
+        <p>{{ question.text }}</p>
+      </div>
+      <div *ngIf="evidence.length > 0; else firstQuestion">
+        <div class="buttons">
+          <button
+            *ngFor="
+              let button of [
+                { id: 'present', name: 'Yes' },
+                { id: 'unknown', name: 'I Don\'t Know' },
+                { id: 'absent', name: 'No' }
+              ]
+            "
+            mat-raised-button
+            class="button"
+            [class.yes]="button.id === 'present'"
+            [class.dont-know]="button.id === 'unknown'"
+            [class.no]="button.id === 'absent'"
+            (click)="addEvidence(button.id)"
+          >
+            {{ button.name }}
+          </button>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #firstQuestion>
+      <div class="buttons">
+        <button
+          *ngFor="let symptom of initialSymptoms"
+          mat-raised-button
+          class="button"
+          (click)="addEvidence('present', symptom.id)"
+        >
+          {{ symptom.name }}
+        </button>
+      </div>
+    </ng-template>
+    <ng-container *ngIf="evidence.length >= 20 || forcedCompletion">
+      <ng-container *ngIf="condition">
+        <div>We have determined that you have {{ condition.common_name }}</div>
+      </ng-container>
+      <div *ngIf="!condition">
+        We could not recognize your condition
+      </div>
+    </ng-container>
+  </div>
+  <div *ngIf="loading">
+    <h1>Loading...</h1>
+  </div>
+</div>

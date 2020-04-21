@@ -1,0 +1,40 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  width: 400px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: left;
+  max-width: 720px;
+}
+
+.button {
+  vertical-align: middle;
+  text-align: center;
+  margin: 4px !important;
+}
+
+.button.yes {
+  background-color: #4155ad;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.button.no {
+  background-color: #df315a;
+  color: white;
+}
+
+.button.dont-know {
+  background-color: #b3b4b3;
+  color: black;
+}
