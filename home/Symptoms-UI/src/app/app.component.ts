@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { tap, timeInterval } from 'rxjs/operators';
 import { DIR_DOCUMENT } from '@angular/cdk/bidi';
-import { SymptomsService } from './symptoms.service';
+import {
+  SymptomsService,
+  Question,
+  Evidence,
+  Condition,
+} from './symptoms.service';
 import { Observable } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
 
@@ -18,12 +23,15 @@ export class AppComponent {
   constructor(private symptomsService: SymptomsService) {}
 
   public questionNumber: string = 'Question 1: ';
-  public question: string = 'Do you have a headache?';
+  public question: Question = {
+    type: 'single',
+    text: 'Click on your most prevalent symptom',
+    items: [],
+  };
+  public loading = false;
+
   public done = false;
-  public response: Observable<any>;
-  public newQuestion: Observable<any>;
-  public name = '';
-  public questionAnswer = '';
+  public forcedCompletion = false;
 
   public sexControl = new FormControl('', Validators.required);
   public ageControl = new FormControl('', Validators.required);
@@ -32,71 +40,77 @@ export class AppComponent {
 
   public ages = new Array(100).fill(undefined).map((_, i) => i + 1);
 
-  public payload = {
-    sex: this.sexControl.value,
-    age: this.ageControl.value,
-    evidence: [
-      {
-        id: 'NA',
-        choice_id: 'NA',
-        initial: 'true',
-      },
-    ],
-    extras: { disable_groups: 'True' },
-  };
+  public evidence: Array<Evidence> = [];
+  public condition?: Condition;
+  public initialSymptoms: Array<{ id: string; name: string }> = [
+    {
+      id: 's_98',
+      name: 'Fever',
+    },
+    {
+      id: 's_21',
+      name: 'Headache',
+    },
+    {
+      id: 's_13',
+      name: 'Stomach Pains',
+    },
+    {
+      id: 's_331',
+      name: 'Nasal Congestion',
+    },
+    {
+      id: 's_102',
+      name: 'Cough',
+    },
+    {
+      id: 's_370',
+      name: 'Dizzy',
+    },
+    {
+      id: 's_50',
+      name: 'Chest Pain',
+    },
+    {
+      id: 's_2077',
+      name: 'Major Bleeding',
+    },
+  ];
 
-  updatePayload(newAnswer, symptomID): void {
-    if (this.counter === 1) {
-      this.payload.sex = this.sexControl.value;
-      this.payload.age = this.ageControl.value;
-      this.payload.evidence = [
-        {
-          id: 's_21',
-          choice_id: this.questionAnswer,
-          initial: 'true',
-        },
-      ];
-    } else {
-      let newEvidence = {
-        id: symptomID.toString(),
-        choice_id: newAnswer.toString(),
-        initial: 'false',
-      };
-      this.payload.evidence.push(newEvidence);
+  async addEvidence(choice_id: string, symptom_id = this.question.items[0].id) {
+    if (!this.sexControl.valid || !this.ageControl.valid) {
+      this.sexControl.markAsTouched();
+      this.ageControl.markAsTouched();
+      return;
     }
-    console.log(this.payload);
-  }
+    this.evidence.push({
+      id: symptom_id,
+      choice_id,
+      initial: this.evidence.length === 0,
+    });
+    this.loading = true;
+    const res = await this.symptomsService
+      .postPayload({
+        sex: this.sexControl.value,
+        age: this.ageControl.value,
+        extras: { disable_groups: 'True' },
+        evidence: this.evidence,
+      })
+      .toPromise();
+    this.loading = false;
 
-  yesFunction(): void {
-    console.log('Yes selected');
-    this.questionAnswer = 'present';
-    this.updatePayload(this.questionAnswer, 's_21');
-    this.buttonClicked();
-  }
-
-  noFunction(): void {
-    console.log('No selected');
-    this.questionAnswer = 'absent';
-    this.updatePayload(this.questionAnswer, 's_21');
-    this.buttonClicked();
-  }
-
-  idkFunction(): void {
-    console.log('Idk selected');
-    this.questionAnswer = 'unknown';
-    this.updatePayload(this.questionAnswer, 's_21');
-    this.buttonClicked();
-  }
-
-  buttonClicked(): void {
-    this.response = this.symptomsService.postPayload(this.payload);
-    this.newQuestion = this.symptomsService.getQuestion();
-    if (this.counter === 20) {
-      this.gettingDiagnosis();
-    } else {
-      this.counter++;
-      this.questionNumber = `Question ${this.counter}: `;
+    if (res.question === null) {
+      this.forcedCompletion = true;
     }
+
+    this.question = res.question;
+    this.condition = res.conditions[0];
+    // if (this.counter === 20) {
+    //   // this.gettingDiagnosis();
+    // } else {
+    //   this.counter++;
+    //   this.questionNumber = `Question ${this.counter}: `;
+    // }
   }
 
   playAgainFunction(): void {
@@ -109,11 +123,9 @@ export class AppComponent {
   async gettingDiagnosis() {
     console.log('getting your diagnosis...');
     this.questionNumber = 'Getting your diagnosis...';
-    this.question = '';
+    // this.question = '';
 
     this.done = true;
-    // this.questionNumber = 'You are fucked';
-    // this.question = ' :(';
   }
 
   public rickRoll() {
