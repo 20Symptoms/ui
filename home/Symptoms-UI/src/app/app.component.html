@@ -14,10 +14,11 @@
           <!-- <input [(ngModel)]="name" style="margin-bottom: 20px;" />
           <div>Your name is: {{ name }}</div>-->
 
-          <h1 *ngIf="response | async as res">{{ res.message }}</h1>
+          <!--<h1 *ngIf="response | async as res">{{ res.message }}</h1>-->
           <ng-container *ngIf="!done">
             <p>Question {{ counter }}:</p>
-            <p>{{ question }}</p>
+            <p *ngIf="response | async as res">{{ res.message }}</p>
+            <p *ngIf="counter === 1">{{ question }}</p>
           </ng-container>
           <ng-container *ngIf="done">
             <h1>{{ name | uppercase }} IS BIG FUCKERINO</h1>

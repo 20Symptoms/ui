@@ -20,4 +20,8 @@ export class SymptomsService {
   postPayload(payload: any = this.payload) {
     return this.http.post(`${BACKEND_URL}/diagnosis/symptoms`, payload);
   }
+
+  getQuestion() {
+    return this.http.get(`${BACKEND_URL}/diagnosis`);
+  }
 }

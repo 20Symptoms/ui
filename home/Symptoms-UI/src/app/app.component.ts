@@ -21,13 +21,14 @@ export class AppComponent {
   public question: string = 'Do you have a headache?';
   public done = false;
   public response: Observable<any>;
+  public newQuestion: Observable<any>;
   public name = '';
   public questionAnswer = '';
 
   public sexControl = new FormControl('', Validators.required);
   public ageControl = new FormControl('', Validators.required);
 
-  public sexes = ['male', 'female', 'Dan'];
+  public sexes = ['male', 'female'];
 
   public ages = new Array(100).fill(undefined).map((_, i) => i + 1);
 
@@ -41,7 +42,7 @@ export class AppComponent {
         initial: 'true',
       },
     ],
-    extras: 'disable_groups',
+    extras: { disable_groups: 'True' },
   };
 
   updatePayload(newAnswer, symptomID): void {
@@ -56,7 +57,6 @@ export class AppComponent {
         },
       ];
     } else {
-      let oldEvidence = this.payload.evidence;
       let newEvidence = {
         id: symptomID.toString(),
         choice_id: newAnswer.toString(),
@@ -90,6 +90,7 @@ export class AppComponent {
 
   buttonClicked(): void {
     this.response = this.symptomsService.postPayload(this.payload);
+    this.newQuestion = this.symptomsService.getQuestion();
     if (this.counter === 20) {
       this.gettingDiagnosis();
     } else {
