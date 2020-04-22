@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 
-const BACKEND_URL = 'http://localhost:3000';
+const BACKEND_URL = 'https://api.20symptoms.com';
 
 export interface QuestionItem {
   id: string;
