@@ -18,5 +18,5 @@ phases:
       - ng build
   post_build:
     commands:
-      - aws s3 sync dist/Symptoms-UI s3://20symptoms.com --delete
+      - aws s3 sync dist/Symptoms-UI s3://20symptoms.com --delete --acl public-read
       - echo Build completed on `date`
